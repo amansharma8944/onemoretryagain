@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { addToCart } from '../../../redux/actions.js';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import AudioPlayer from './AudioPlayer.js';
+import AlertDialog from './PopUpHindi.js';
 
 const dataofbooks = [
     {
@@ -209,6 +210,19 @@ const BookDetails = () => {
   const { id } = useParams();
   const [VideoSwitch, setVideoSwitch] = useState(false)
   const dispatch = useDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [referralCode, setReferralCode] = React.useState('');
+  const openModal = () => {
+    const code = generateReferralCode();
+   
+    setReferralCode(code);
+    setIsModalOpen(true);
+  };
+
+  const generateReferralCode = () => {
+    // This function generates a random 6 character string, modify as needed.
+    return Math.random().toString(36).substr(2, 6).toUpperCase();
+  };
 
   const handleAddToCart = (title, price, src, desc, index) => {
 
@@ -302,7 +316,8 @@ const BookDetails = () => {
       <div className='w-full flex justify-center ml-[59px]'>
         
       <button
-        className='h-[6vh] w-[8vw] border mr-[25px] border-[black] p-[5px] font-[500] hover:cursor-pointer hover:bg-[green] hover:text-[white]'
+         className='h-[6vh] w-[8vw] border mr-[25px] border-[black] p-[5px] font-[500] hover:cursor-pointer hover:bg-[green] hover:text-[white]'
+         onClick={openModal}
         >अभी खरीदें</button>
         <button
         className='h-[6vh] w-[8vw] border mr-[25px] border-[black] p-[5px] font-[500] hover:cursor-pointer hover:bg-[green] hover:text-[white]'
@@ -311,6 +326,11 @@ const BookDetails = () => {
         onClick={() => handleAddToCart(Book[0].title, Book[0].price, Book[0].src, Book[0].desc, Book[0].index)}
       >कार्ट में जोड़ें</button></div>
       <FooterHindi />
+      <AlertDialog
+      isModalOpen={isModalOpen}
+      setIsModalOpen={setIsModalOpen}
+      code={referralCode}
+      />
     </>
 
   )
